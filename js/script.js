@@ -1,36 +1,34 @@
 const dino = document.querySelector(".dino");
 const background = document.querySelector(".background");
+let dinoPosition = 0;
 let isJumping = false;
 function handleKeyUp(event) {
     // apertou botao pra pular
-    if (event.keyCode === 32) {
-        if (!isJumping) {
-            jump();
-        }
+    if (event.keyCode === 32 && !isJumping) {
+        jump()
     }
 }
 function jump() {
-    let position = 0;
     isJumping = true;
     let upInterval = setInterval(() => {
         //pra evitar que suba indefinidamente
-        if (position >= 150) {
+        if (dinoPosition >= 150) {
             clearInterval(upInterval);
             let downInterval = setInterval(() => {
                 //pra evitar que desca indefinidamente
-                if (position <= 0) {
-                    clearInterval(downInterval);
+                if (dinoPosition <= 0) {
                     isJumping = false;
+                    clearInterval(downInterval);
                 } else {
                     //descer
-                    position -= 20;
-                    dino.style.bottom = position + "px";
+                    dinoPosition -= 20;
+                    dino.style.bottom = dinoPosition + "px";
                 }
             }, 20);
         } else {
             //subir
-            position += 20;
-            dino.style.bottom = position + "px";
+            dinoPosition += 20;
+            dino.style.bottom = dinoPosition + "px";
         }
     }, 20);
 }
@@ -46,13 +44,16 @@ function createCactus() {
         if (cactusPosition < -60) {
             clearInterval(leftInterval);
             background.removeChild(cactus);
+        } else if (cactusPosition > 0 && cactusPosition < 60 && dinoPosition < 60) {
+            //significa que é aqui que tá o dino
+            clearInterval(leftInterval);
+            document.body.innerHTML = '<h1 class="game-over">Fim de Jogo</h1>';
         } else {
             cactusPosition -= 10;
             cactus.style.left = cactusPosition + "px";
         }
     }, 20);
     setTimeout(createCactus, randomTime);
-
 }
 createCactus();
 document.addEventListener("keyup", handleKeyUp);
