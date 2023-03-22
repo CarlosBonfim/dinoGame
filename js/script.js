@@ -5,9 +5,10 @@ let isJumping = false;
 function handleKeyUp(event) {
     // apertou botao pra pular
     if (event.keyCode === 32 && !isJumping) {
-        jump()
+        jump();
     }
 }
+document.addEventListener("keyup", handleKeyUp);
 function jump() {
     isJumping = true;
     let upInterval = setInterval(() => {
@@ -56,4 +57,4 @@ function createCactus() {
     setTimeout(createCactus, randomTime);
 }
 createCactus();
-document.addEventListener("keyup", handleKeyUp);
+
